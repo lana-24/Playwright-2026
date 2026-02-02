@@ -5,7 +5,7 @@ with sync_playwright() as p:
     browser = p.chromium.launch(headless=True)
     
     # 2. make the context
-    context = browser.new_content()
+    context = browser.new_context()
     
     # 3. make the page
     page = context.new_page()
