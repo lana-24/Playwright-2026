@@ -1,7 +1,7 @@
 from playwright.sync_api import sync_playwright, expect
 
-with sync_playwright as p:
-    browser = p.chromium_launc(headless=True)
+with sync_playwright() as p:
+    browser = p.chromium.launch(headless=True)
     context = browser.new_context()
     page = context.new_page()
     page.goto('https://practice.qabrains.com/registration')
@@ -19,7 +19,7 @@ with sync_playwright as p:
     page.get_by_role('textbox', name='Email').fill('user@user.com')
 
     #5. fill password and confirm password
-    page.get_by_role('textbox', name='Password').fill('Password123')
+    page.locator('#password').fill("Password123")
     page.get_by_role('textbox', name='Confirm Password').fill('Password123')
 
     #6. click button
