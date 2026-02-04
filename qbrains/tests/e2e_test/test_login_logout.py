@@ -25,3 +25,5 @@ with sync_playwright() as p:
     page.get_by_role('button', name='Logout').click()
     # 12.assert logout sucesfully
     expect(page.get_by_role('button', name='Login')).to_be_visible()
+
+    browser.close()

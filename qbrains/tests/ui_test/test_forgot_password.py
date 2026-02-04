@@ -11,3 +11,5 @@ with sync_playwright() as p:
     page.get_by_role('button', name='Reset Password').click()
     
     expect(page.get_by_text('Password is reset successfully.')).to_be_visible()
+
+    browser.close()

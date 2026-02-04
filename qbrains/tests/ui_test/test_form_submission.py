@@ -18,3 +18,5 @@ with sync_playwright() as p:
     page.locator("button.btn-submit").click()
 
     expect(page.get_by_text('Form submit successfully.')).to_be_visible()
+
+    browser.close()
