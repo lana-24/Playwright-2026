@@ -28,8 +28,8 @@ with sync_playwright() as p:
     page.locator('span[role="button"].relative').click()
     # 11.remove all products in cart
     for product in products:
-        page.locator('div.flex.items-center.gap-5', has_text='Sample Shirt Name').get_by_role('button', name='Remove').click()
-        page.locator('button', name='Remove').click()
+        page.locator('div.flex.items-center.gap-5', has_text=product).get_by_role('button', name='Remove').click()
+        page.get_by_role('button', name='Remove').click()
 
     # 12.click profile
     page.get_by_role('button', name='test@qabrains.com').click()
