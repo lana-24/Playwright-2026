@@ -1,3 +1,5 @@
 # QABRAINS DEMO E-COMMERCE WEBSITE
-THIS IS MY FIRST PROJECT USE PLAYWRIGHT TO UI TEST AUTOMATION
-I JUST USE PLAYWRIGHT, BECAUSE I FOCUSE TO UNDERSTANDING THE CONCEPT FIRST.
+This is my first project UI testing automation use playwright.
+i focuse to understanding the consept first.
+
+** Note: if you want to look the history commit, you can switch to qbrains branch, because i use squash merge ** 
