@@ -13,6 +13,7 @@ class BookRoom(BasePage):
         self.navigate()
         self.page.locator('.navbar-toggler').dispatch_event('click')
         self.page.locator('#navbarNav').get_by_role('link', name='Rooms').click()
+        self.page.get_by_role('button', name='Check Availability').click()
 
     def select_room(self, capasity: Literal['single', 'double', 'suite']):
         logger.info(f'select {capasity} room')
@@ -23,7 +24,7 @@ class BookRoom(BasePage):
         logger.info(f'try booking with the name {fname}')
         # fill first name
         logger.info(f'fill firstname: {fname}')
-        self.page.get_by_label('Firstname').fill(fname)
+        self. page.get_by_label('Firstname').fill(fname)
         # fill last name
         logger.info(f'fill lastname: {lname}')
         self.page.get_by_label('Lastname').fill(lname)
@@ -40,7 +41,7 @@ class BookRoom(BasePage):
             self.page.get_by_role('button', name='Reserve Now').click()
             
         self.response = response_info.value
-        return self.page.get_by_role('button', name='Return home')
+        return self.page.locator('a:has-text("Return home")')
 
     def get_id(self):
         logger.debug('getting booking id')
@@ -48,6 +49,7 @@ class BookRoom(BasePage):
 
     def submit_invalid_form(self):
         self.page.get_by_role('button', name='Reserve Now').click()
+        self.page.locator('.alert-danger li').first.wait_for()
         list_error = self.page.locator('.alert-danger li').all_inner_texts()
         logger.info(f'an error warning appears, total: {len(list_error)}')
         return list_error

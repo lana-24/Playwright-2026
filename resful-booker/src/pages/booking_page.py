@@ -6,7 +6,7 @@ class BookingPage(BasePage):
         
     def to_bookingpage(self):
         self.navigate()
-        self.page.locator('.navbar-toggler').click()
+        self.page.locator('.navbar-toggler').dispatch_event('click')
         self.page.locator('#navbarNav').get_by_role('link', name='Booking').click()
         
     def fill_date(self, ckin, ckout):

@@ -7,7 +7,7 @@ from playwright.sync_api import sync_playwright
 @pytest.fixture(scope="session", autouse=True)
 def manage_logging():
     if not os.path.exists('logs'):
-        os.mkdirs('logs')
+        os.mkdir('logs')
     log_file = f'logs/run_{datetime.now().strftime("%Y%m%d_%H%M%S")}.log'
     logging.basicConfig(level=logging.INFO,
                         format='%(asctime)s [%(levelname)s] %(name)s: %(message)s',
