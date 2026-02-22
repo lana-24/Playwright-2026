@@ -11,22 +11,27 @@ class BookRoom(BasePage):
         
     def to_rooms(self):
         self.navigate()
-        self.page.locator('.navbar-toggler').dispatch_event('click')
-        self.page.locator('#navbarNav').get_by_role('link', name='Rooms').click()
+        #self.page.locator('.navbar-toggler').dispatch_event('click')
+        #self.page.locator('#navbarNav').get_by_role('link',name='Rooms').click()
+        self.page.locator("xpath=//label[@for='checkin']/following-sibling::div//input").fill('01/02/2026')
+        self.page.locator("xpath=//label[@for='checkout']/following-sibling::div//input").fill('02/02/2026')
         self.page.get_by_role('button', name='Check Availability').click()
+        self.page.wait_for_load_state("networkidle")
+        logger.debug('check done')
 
     def select_room(self):
         for o in ['single', 'double', 'suite']:
-            logger.info(f'select {o} room')
             room = self.page.locator('.card').filter(has_text=o).get_by_role('link', name='Book now')
-            if room.is_visible(timeout=2000):
+            if room.is_visible(timeout=5000):
+                logger.info(f'select {o} room')
                 room.click()
                 return True
-            else:
-                logger.info(f"{o} room is not visible")
+            
+        logger.info(f"all room is not visible")
+        return False
 
     def reserve_room(self, fname: str, lname: str, email: str, phone: int):
-        self.page.get_by_role('button', name='Reserve Now').click()
+        self.page.get_by_role('button', name='Reserve Now').dispatch_event('click')
         logger.info(f'try booking with the name {fname}')
         # fill first name
         logger.info(f'fill firstname: {fname}')
@@ -44,10 +49,11 @@ class BookRoom(BasePage):
     def submit_valid_form(self):
         logger.info('click reserve now')
         with self.page.expect_response('**/api/booking') as response_info:
-            self.page.get_by_role('button', name='Reserve Now').click()
-            
+            self.page.get_by_role('button', name='Reserve Now').dispatch_event('click')
+            #self.page.locator('.btn-secondary').filter(has_text='Reserve Now').click()
         self.response = response_info.value
-        return self.page.locator('a:has-text("Return home")')
+        return self.page.locator('a').filter(has_text="Return home")
+        #return self.page.locator('a').filter(has_text="Return home")
 
     def get_id(self):
         logger.debug('getting booking id')

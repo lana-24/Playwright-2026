@@ -7,22 +7,30 @@ from test_data.fill_users import valid_users, invalid_users, invalid_firstname, 
 logger = logging.getLogger(__name__)
 
 #@pytest.mark.parametrize('fname, lname, email, phone', valid_users)
-@pytest.mark.parametrize('fname, lname, email, phone', [('lana','lano','lana@test.com','1121212123123')])
+@pytest.mark.parametrize('fname, lname, email, phone',
+                         valid_users
+                         #[('lana','lako','lana@test.com','1121212123123')]
+                         )
 def test_booking_rooms(turn_on, fname, lname, email, phone):
     booking = BookRoom(turn_on)
     booking.to_rooms()
-    booking.select_room()
+    room = booking.select_room()
+    assert room is True
     booking.reserve_room(fname, lname, email, phone)
     confirmed = booking.submit_valid_form()
     expect(confirmed).to_be_attached()
     logger.info('Booking Confirmed')
 
 #@pytest.mark.parametrize('fname, lname, email, phone', invalid_users)
-@pytest.mark.parametrize('fname, lname, email, phone', [('la','li','lanatest.com','1121')])
+@pytest.mark.parametrize('fname, lname, email, phone',
+                         invalid_users
+                         #[('la','li','lanatest.com','1121')]
+                         )
 def test_booking_with_invalid_identity(turn_on, fname, lname, email, phone):
     booking = BookRoom(turn_on)
     booking.to_rooms()
-    booking.select_room()
+    room = booking.select_room()
+    assert room is True
     booking.reserve_room(fname, lname, email, phone)
     list_error = booking.submit_invalid_form()
     assert isinstance(list_error, list)
@@ -33,11 +41,15 @@ def test_booking_with_invalid_identity(turn_on, fname, lname, email, phone):
     assert sorted(list_error) == sorted(expected)
 
 #@pytest.mark.parametrize('fname, lname, email, phone', invalid_firstname)
-@pytest.mark.parametrize('fname, lname, email, phone', [('la','lano','lana@test.com','1121212123123')])
+@pytest.mark.parametrize('fname, lname, email, phone',
+                         invalid_firstname
+                         #[('la','lano','lana@test.com','1121212123123')]
+                         )
 def test_booking_with_invalid_fname(turn_on, fname, lname, email, phone):
     booking = BookRoom(turn_on)
     booking.to_rooms()
-    booking.select_room()
+    room = booking.select_room()
+    assert room is True
     booking.reserve_room(fname, lname, email, phone)
     list_error = booking.submit_invalid_form()
     assert isinstance(list_error, list)
@@ -45,11 +57,15 @@ def test_booking_with_invalid_fname(turn_on, fname, lname, email, phone):
     assert list_error == expected
 
 #@pytest.mark.parametrize('fname, lname, email, phone', invalid_lastname)
-@pytest.mark.parametrize('fname, lname, email, phone', [('lana','la','lana@test.com','1121212123123')])
+@pytest.mark.parametrize('fname, lname, email, phone',
+                         invalid_lastname
+                         #[('lana','la','lana@test.com','1121212123123')]
+                         )
 def test_booking_with_invalid_lname(turn_on, fname, lname, email, phone):
     booking = BookRoom(turn_on)
     booking.to_rooms()
-    booking.select_room()
+    room = booking.select_room()
+    assert room is True
     booking.reserve_room(fname, lname, email, phone)
     list_error = booking.submit_invalid_form()
     assert isinstance(list_error, list)
@@ -57,11 +73,15 @@ def test_booking_with_invalid_lname(turn_on, fname, lname, email, phone):
     assert list_error == expected
 
 #@pytest.mark.parametrize('fname, lname, email, phone', invalid_email)
-@pytest.mark.parametrize('fname, lname, email, phone', [('lana','lano','lanatest.com','1121212123123')])
+@pytest.mark.parametrize('fname, lname, email, phone',
+                         invalid_email
+                         #[('lana','lano','lanatest.com','1121212123123')]
+                         )
 def test_booking_with_invalid_email(turn_on, fname, lname, email, phone):
     booking = BookRoom(turn_on)
     booking.to_rooms()
-    booking.select_room()
+    room = booking.select_room()
+    assert room is True
     booking.reserve_room(fname, lname, email, phone)
     list_error = booking.submit_invalid_form()
     assert isinstance(list_error, list)
@@ -69,11 +89,15 @@ def test_booking_with_invalid_email(turn_on, fname, lname, email, phone):
     assert list_error == expected
 
 #@pytest.mark.parametrize('fname, lname, email, phone', invalid_phone)
-@pytest.mark.parametrize('fname, lname, email, phone', [('lana','lano','lana@test.com','112123')])
+@pytest.mark.parametrize('fname, lname, email, phone',
+                         invalid_phone
+                         #[('lana','lano','lana@test.com','112123')]
+                         )
 def test_booking_with_invalid_phone(turn_on, fname, lname, email, phone):
     booking = BookRoom(turn_on)
     booking.to_rooms()
-    booking.select_room()
+    room = booking.select_room()
+    assert room is True
     booking.reserve_room(fname, lname, email, phone)
     list_error = booking.submit_invalid_form()
     assert isinstance(list_error, list)
