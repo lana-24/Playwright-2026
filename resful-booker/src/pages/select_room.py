@@ -15,9 +15,15 @@ class BookRoom(BasePage):
         self.page.locator('#navbarNav').get_by_role('link', name='Rooms').click()
         self.page.get_by_role('button', name='Check Availability').click()
 
-    def select_room(self, capasity: Literal['single', 'double', 'suite']):
-        logger.info(f'select {capasity} room')
-        self.page.locator('.card').filter(has_text=capasity).get_by_role('link', name='Book now').click()
+    def select_room(self):
+        for o in ['single', 'double', 'suite']:
+            logger.info(f'select {o} room')
+            room = self.page.locator('.card').filter(has_text=o).get_by_role('link', name='Book now')
+            if room.is_visible(timeout=2000):
+                room.click()
+                return True
+            else:
+                logger.info(f"{o} room is not visible")
 
     def reserve_room(self, fname: str, lname: str, email: str, phone: int):
         self.page.get_by_role('button', name='Reserve Now').click()

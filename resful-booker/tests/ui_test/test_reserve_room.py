@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 def test_booking_rooms(turn_on, fname, lname, email, phone):
     booking = BookRoom(turn_on)
     booking.to_rooms()
-    booking.select_room('suite')
+    booking.select_room()
     booking.reserve_room(fname, lname, email, phone)
     confirmed = booking.submit_valid_form()
     expect(confirmed).to_be_attached()
@@ -22,7 +22,7 @@ def test_booking_rooms(turn_on, fname, lname, email, phone):
 def test_booking_with_invalid_identity(turn_on, fname, lname, email, phone):
     booking = BookRoom(turn_on)
     booking.to_rooms()
-    booking.select_room('suite')
+    booking.select_room()
     booking.reserve_room(fname, lname, email, phone)
     list_error = booking.submit_invalid_form()
     assert isinstance(list_error, list)
@@ -37,7 +37,7 @@ def test_booking_with_invalid_identity(turn_on, fname, lname, email, phone):
 def test_booking_with_invalid_fname(turn_on, fname, lname, email, phone):
     booking = BookRoom(turn_on)
     booking.to_rooms()
-    booking.select_room('suite')
+    booking.select_room()
     booking.reserve_room(fname, lname, email, phone)
     list_error = booking.submit_invalid_form()
     assert isinstance(list_error, list)
@@ -49,7 +49,7 @@ def test_booking_with_invalid_fname(turn_on, fname, lname, email, phone):
 def test_booking_with_invalid_lname(turn_on, fname, lname, email, phone):
     booking = BookRoom(turn_on)
     booking.to_rooms()
-    booking.select_room('suite')
+    booking.select_room()
     booking.reserve_room(fname, lname, email, phone)
     list_error = booking.submit_invalid_form()
     assert isinstance(list_error, list)
@@ -61,7 +61,7 @@ def test_booking_with_invalid_lname(turn_on, fname, lname, email, phone):
 def test_booking_with_invalid_email(turn_on, fname, lname, email, phone):
     booking = BookRoom(turn_on)
     booking.to_rooms()
-    booking.select_room('suite')
+    booking.select_room()
     booking.reserve_room(fname, lname, email, phone)
     list_error = booking.submit_invalid_form()
     assert isinstance(list_error, list)
@@ -73,7 +73,7 @@ def test_booking_with_invalid_email(turn_on, fname, lname, email, phone):
 def test_booking_with_invalid_phone(turn_on, fname, lname, email, phone):
     booking = BookRoom(turn_on)
     booking.to_rooms()
-    booking.select_room('suite')
+    booking.select_room()
     booking.reserve_room(fname, lname, email, phone)
     list_error = booking.submit_invalid_form()
     assert isinstance(list_error, list)
