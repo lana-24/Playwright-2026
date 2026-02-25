@@ -28,7 +28,7 @@ class BookRoom(BasePage):
                 room.click()
                 return True
             
-        logger.info("all room is not visible")
+        logger.error("all room is not visible")
         return False
 
     def reserve_room(self, fname: str, lname: str, email: str, phone: int):

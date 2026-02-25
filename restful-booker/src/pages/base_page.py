@@ -5,4 +5,4 @@ class BasePage:
         self.page = page
 
     def navigate(self):
-        self.page.goto(BASE_URL_UI)
+        self.page.goto(BASE_URL_UI, wait_until='commit')
