@@ -25,13 +25,14 @@ def pytest_runtest_makereport(item, call):
     report = outcome.get_result()
 
     # Kita hanya mencatat saat test GAGAL di tahap eksekusi (call)
-    if report.when == "call" and report.failed:
+    if report.failed:
         page = item.funcargs.get("page")
         test_name = item.name
+        summary = str(report.longrepr.reprcrash.message) if hasattr(report.longrepr, 'reprcrash')  else "Error not defined"
         
         # Log ke file via logging module (Fixture kamu yang handle filenya)
         logger.error(f"TEST FAILED: {test_name}")
-        logger.error(f"Error Message: {report.longreprtext}")
+        logger.error(f"Short error Message: {summary}")
 
         if page:
             # 1. Catat URL terakhir saat error
@@ -43,7 +44,9 @@ def pytest_runtest_makereport(item, call):
             # Log ini bisa kita ambil dari properti page jika kita setup listener (lihat poin 3)
 
             # 3. Ambil Screenshot untuk bukti visual
-            screenshot_path = f"logs/fail_{test_name}_{datetime.now().strftime("%y%m%d_%H%M%S")}.png"
+            if not os.path.exists('logs/screenshots'):
+                os.mkdir('logs/screenshots')
+            screenshot_path = f"logs/screenshots/fail_{test_name}_{datetime.now().strftime("%y%m%d_%H%M%S")}.png"
             page.screenshot(path=screenshot_path)
             logger.info(f"Screenshot disimpan di: {screenshot_path}")
 
@@ -70,7 +73,8 @@ def page():
         context = browser.new_context()
         page = context.new_page()
         page.set_default_timeout(5000)
+        page.set_default_navigation_timeout(15000)
         yield page
-        logger.info('END<<<')
+        logger.info('END<<<\n')
         context.close()
         browser.close()  
