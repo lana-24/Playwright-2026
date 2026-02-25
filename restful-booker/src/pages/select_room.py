@@ -1,4 +1,5 @@
 import logging
+import pytest
 from playwright.sync_api import expect
 from src.pages.base_page import BasePage
 from typing import Literal
@@ -17,7 +18,7 @@ class BookRoom(BasePage):
         self.page.locator("xpath=//label[@for='checkout']/following-sibling::div//input").fill('02/02/2026')
         self.page.get_by_role('button', name='Check Availability').click()
         self.page.wait_for_load_state("networkidle")
-        logger.debug('check done')
+        logger.debug('check available done')
 
     def select_room(self):
         for o in ['single', 'double', 'suite']:
@@ -27,7 +28,7 @@ class BookRoom(BasePage):
                 room.click()
                 return True
             
-        logger.info(f"all room is not visible")
+        logger.info("all room is not visible")
         return False
 
     def reserve_room(self, fname: str, lname: str, email: str, phone: int):
@@ -52,6 +53,10 @@ class BookRoom(BasePage):
             self.page.get_by_role('button', name='Reserve Now').dispatch_event('click')
             #self.page.locator('.btn-secondary').filter(has_text='Reserve Now').click()
         self.response = response_info.value
+        self.response_code = self.response.status 
+        if self.response_code == 409:
+            logger.error(f"{self.response_code}: {self.response.json().get('error')}, your resource might be duplicate.")
+            pytest.fail('Application error')
         return self.page.locator('a').filter(has_text="Return home")
         #return self.page.locator('a').filter(has_text="Return home")
 
