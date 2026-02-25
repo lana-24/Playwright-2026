@@ -1,14 +1,26 @@
-valid_users = [('lan','lunr','lanlun12@test.com','1231231238973463'),
-                  ('lin','lunr','lanlun32@test.com','1231231238976346'),
-                  ('lun','lunq','lanlun23@test.com','123123123897463'),
-                  ('lon','lunq','lanlun312@test.com','12312312384637'),
-                  ('len','lunw','lanlun412@test.com','123123123896347'),
-                  ('tan','lune','lanlun1231@test.com','123123123864397'),
-                  ('tin','lune','lanlun3213@test.com','123123123857474'),
-                  ('tun','lund','lanlun231@test.com','12312312342457'),
-                  ('ten','lunh','lanlun13431@test.com','12312312845497'),
-                  ('ton','lung','lanlun131@test.com','12312312457497')
+from faker import Faker
+fake = Faker('id_ID')
+valid_users = []
+for i in range(10):
+    users = (fake.first_name(),
+             fake.last_name(),
+             fake.email(),
+             fake.bothify(text="08############")
+             )
+    valid_users.append(users)
+    
+"""valid_users = [(fake.first_name(),   fake.last_name(),'lanlun12@test.com','1231231238973463'),
+               (fake.first_name(),fake.last_name(),'lanlun32@test.com','1231231238976346'),
+                  (fake.first_name(),fake.last_name(),'lanlun23@test.com','123123123897463'),
+(fake.first_name(), fake.last_name(),'lanlun312@test.com','12312312384637'),
+(fake.first_name(), fake.last_name(),'lanlun412@test.com','123123123896347'),
+                  (fake.first_name(),fake.last_name(),'lanlun1231@test.com','123123123864397'),
+                  (fake.first_name(),fake.last_name(),'lanlun3213@test.com','123123123857474'),
+                  (fake.first_name(),fake.last_name(),'lanlun231@test.com','12312312342457'),
+                  (fake.first_name(),fake.last_name(),'lanlun1431@test.com','12312312845497'),
+                  (fake.first_name(),fake.last_name(),'lanlun131@test.com','12312312457497')
             ]
+"""
 
 invalid_users = [('la','lu','lanlun12@','123123'),
                   ('li','lu','lanlun32@','11231'),
