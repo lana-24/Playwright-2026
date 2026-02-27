@@ -3,6 +3,7 @@ import pytest
 from playwright.sync_api import expect
 from src.pages.base_page import BasePage
 from typing import Literal
+from datetime import datetime, timedelta
 
 logger = logging.getLogger(__name__)
 
@@ -12,20 +13,25 @@ class BookRoom(BasePage):
         
     def to_rooms(self):
         self.navigate()
-        #self.page.locator('.navbar-toggler').dispatch_event('click')
-        #self.page.locator('#navbarNav').get_by_role('link',name='Rooms').click()
-        self.page.locator("xpath=//label[@for='checkin']/following-sibling::div//input").fill('01/02/2026')
-        self.page.locator("xpath=//label[@for='checkout']/following-sibling::div//input").fill('02/02/2026')
-        self.page.get_by_role('button', name='Check Availability').click()
+        tommorow  = (datetime.now() + timedelta(days=1)).strftime("%d/%m/%Y")
+        self.page.locator("xpath=//label[@for='checkin']/following-sibling::div//input").fill(datetime.now().strftime("%d/%m/%Y"))
+        logger.info(f'fill chekin: {datetime.now().strftime("%d/%m/%Y")}')
+        self.page.locator("xpath=//label[@for='checkout']/following-sibling::div//input").fill(tommorow)
+        logger.info(f'fill chekin: {tommorow}')
+        self.page.get_by_role('button', name='Check Availability').dispatch_event('click')
         self.page.wait_for_load_state("networkidle")
-        logger.debug('check available done')
+        logger.info('check available done')
 
     def select_room(self):
         for o in ['single', 'double', 'suite']:
-            room = self.page.locator('.card').filter(has_text=o).get_by_role('link', name='Book now')
+            room = self.page.locator('.card').filter(
+            has=self.page.locator('.card-title', has_text=o)
+            ).get_by_role('link', name='Book now')
+
             if room.is_visible(timeout=5000):
                 logger.info(f'select {o} room')
-                room.click()
+                room.wait_for(state="attached", timeout=5000)
+                room.click(force=True)
                 return True
             
         logger.error("all room is not visible")
@@ -57,8 +63,10 @@ class BookRoom(BasePage):
         if self.response_code == 409:
             logger.error(f"{self.response_code}: {self.response.json().get('error')}, your resource might be duplicate.")
             pytest.fail('Application error')
+        return self.response
+        
+    def return_home(self):
         return self.page.locator('a').filter(has_text="Return home")
-        #return self.page.locator('a').filter(has_text="Return home")
 
     def get_id(self):
         logger.debug('getting booking id')

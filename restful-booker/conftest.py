@@ -62,9 +62,6 @@ def capture_browser_console(page):
     page.on("console", handle_console)
     yield
             
-
-
-    
 @pytest.fixture()
 def page():
     with sync_playwright() as p:
@@ -78,3 +75,4 @@ def page():
         logger.info('END<<<\n')
         context.close()
         browser.close()  
+

@@ -17,9 +17,15 @@ def test_booking_rooms(page, fname, lname, email, phone):
     room = booking.select_room()
     assert room is True
     booking.reserve_room(fname, lname, email, phone)
-    confirmed = booking.submit_valid_form()
-    expect(confirmed).to_be_attached()
+    response_value = booking.submit_valid_form()
+    if response_value.status >= 400:
+        logger.error(f'status code {response_value.status}, response: {response_value.json()}')
+        pytest.fail(f'status code {response_value.status}, response: {response_value.json()}')
+        
+    return_home = booking.return_home()
+    expect(return_home).to_be_attached()
     logger.info('Booking Confirmed')
+    return_home.click(force=True)
 
 #@pytest.mark.parametrize('fname, lname, email, phone', invalid_users)
 @pytest.mark.parametrize('fname, lname, email, phone',
@@ -103,3 +109,4 @@ def test_booking_with_invalid_phone(page, fname, lname, email, phone):
     assert isinstance(list_error, list)
     expected = ['size must be between 11 and 21']
     assert list_error == expected
+
