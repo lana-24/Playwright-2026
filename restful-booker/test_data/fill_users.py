@@ -3,7 +3,7 @@ from datetime import datetime
 
 fake = Faker('id_ID')
 valid_users = []
-for i in range(3):
+for i in range(2):
     users = (f'{fake.first_name()}{datetime.now().strftime("%m%d_M%S")}',
              f'{fake.last_name()}{datetime.now().strftime("%m%d_%M%S")}',
              f'{fake.email()}{datetime.now().strftime("%m%d_%H%M%S")}',
