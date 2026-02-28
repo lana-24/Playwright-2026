@@ -3,6 +3,11 @@ import os
 from datetime import datetime
 import logging
 from playwright.sync_api import sync_playwright
+from dotenv import load_dotenv
+
+load_dotenv()
+BASE_URL_API = os.getenv('BASE_URL_API')
+""" manage logging """
 
 @pytest.fixture(scope="session", autouse=True)
 def manage_logging():
@@ -61,7 +66,9 @@ def capture_browser_console(page):
 
     page.on("console", handle_console)
     yield
-            
+
+""" fixture for ui testing """
+    
 @pytest.fixture()
 def page():
     with sync_playwright() as p:
@@ -76,3 +83,30 @@ def page():
         context.close()
         browser.close()  
 
+""" fixture for api testing """
+                
+@pytest.fixture(scope="session")
+def token(playwright):
+    headers = {
+        "Accept" : "application/vnd.github.v3+json",
+        }
+    data = {
+        "username" : "admin",
+        "password" : "password123"
+}
+    p = playwright.request.new_context(base_url=BASE_URL_API, extra_http_headers=headers)
+    response = p.post('/auth', data=data)
+    r = response.json()
+    assert r.get('token')
+    return response.get('token')
+    
+def api(playwright, token):
+    logger.info('>>>START')
+    headers = {
+        "Accept" : "application/vnd.github.v3+json",
+        "Cookie" : f"token={token}"
+    }
+    p = playwright.request.new_context(base_url = BASE_URL_API, extra_http_headers=headers)
+    yield p
+    logger.info('END<<<')
+    p.dispose()
