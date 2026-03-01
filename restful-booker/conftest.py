@@ -2,7 +2,6 @@ import pytest
 import os
 from datetime import datetime
 import logging
-from playwright.sync_api import sync_playwright
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -31,7 +30,9 @@ def pytest_runtest_makereport(item, call):
 
     # Kita hanya mencatat saat test GAGAL di tahap eksekusi (call)
     if report.failed:
-        page = item.funcargs.get("page")
+        is_ui = "ui_test" in item.nodeid
+        page = item.funcargs.get("page") if is_ui else None
+        logger.info(f'page {page}')
         test_name = item.name
         summary = str(report.longrepr.reprcrash.message) if hasattr(report.longrepr, 'reprcrash')  else "Error not defined"
         
@@ -39,7 +40,7 @@ def pytest_runtest_makereport(item, call):
         logger.error(f"TEST FAILED: {test_name}")
         logger.error(f"Short error Message: {summary}")
 
-        if page:
+        if page and is_ui:
             # 1. Catat URL terakhir saat error
             logger.info(f"URL saat error: {page.url}")
 
@@ -70,19 +71,13 @@ def capture_browser_console(page):
 """ fixture for ui testing """
     
 @pytest.fixture()
-def page():
-    with sync_playwright() as p:
-        logger.info('>>>START')
-        browser = p.chromium.launch(headless=True)
-        context = browser.new_context()
-        page = context.new_page()
-        page.set_default_timeout(5000)
-        page.set_default_navigation_timeout(15000)
-        yield page
-        logger.info('END<<<\n')
-        context.close()
-        browser.close()  
-
+def browser_page(page):
+    logger.info('>>>START')
+    page.set_default_timeout(5000)
+    page.set_default_navigation_timeout(15000)
+    yield page
+    logger.info('END<<<\n')
+    
 """ fixture for api testing """
                 
 @pytest.fixture(scope="session")
@@ -98,9 +93,11 @@ def token(playwright):
     response = p.post('/auth', data=data)
     r = response.json()
     assert r.get('token')
-    return response.get('token')
+    yield r.get('token')
+    p.dispose()
     
-def api(playwright, token):
+@pytest.fixture()
+def api_request(playwright, token):
     logger.info('>>>START')
     headers = {
         "Accept" : "application/vnd.github.v3+json",
@@ -108,5 +105,5 @@ def api(playwright, token):
     }
     p = playwright.request.new_context(base_url = BASE_URL_API, extra_http_headers=headers)
     yield p
-    logger.info('END<<<')
+    logger.info('END<<<\n')
     p.dispose()

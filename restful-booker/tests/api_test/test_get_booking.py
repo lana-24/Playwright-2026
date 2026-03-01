@@ -4,16 +4,16 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-def test_get_booking_id(api):
+def test_get_booking_id(api_request):
     schema = {"type" : "array",
-                      "items" : {"properties" : {"bookingid" : {"type" : "string"}
+                      "items" : {"properties" : {"bookingid" : {"type" : "integer"}
                                               }},
                       "required" : ["bookingid"]
                       }
     # request get
     logger.info('start request get /booking')
-    response = api.get('/booking')
-    assert response.ok, "response is'nt ok'"
+    response = api_request.get('/booking')
+    assert response.ok, f"response is'nt ok, {response.status}"
     logger.info('response status ok')
     assert response.body(), "there is'nt body'"
     logger.info('there is body')
@@ -24,7 +24,7 @@ def test_get_booking_id(api):
 
 #@pytest.parametrize("bookingid", [])
 #def test_get_booking_spesific_id(api, bookingid: int):
-def test_get_booking_spesific_id(api):
+def test_get_booking_spesific_id(api_request):
     schema = {"type" : "object",
               "properties" : {"firstname" : {"type" : "string"},
                               "lastname" : {"type" : "string"},
@@ -42,8 +42,8 @@ def test_get_booking_spesific_id(api):
                       }
     # request get
     logger.info('start request get /booking/1')
-    response = api.get('/booking/1')
-    assert response.ok, "response is'nt ok'"
+    response = api_request.get('/booking/1')
+    assert response.ok, f"response is'nt ok, {response.status}"
     logger.info('response status ok')
     assert response.body(), "there is'nt body'"
     logger.info('there is body')

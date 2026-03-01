@@ -3,7 +3,7 @@ import jsonschema
 import logging
 logger = logging.getLogger(__name__)
 
-@pytest.parametrize('method, bookingid, firstname, lastname',
+@pytest.mark.parametrize('method, bookingid, firstname, lastname',
                     [('put', 1, 'lana', 'lancu'),
                      ('put', 1, 'lata', 'lyncu'),
                      ('put', 1, 'lona', 'loncu'),
@@ -13,16 +13,16 @@ logger = logging.getLogger(__name__)
                      ('patch', 1, 'latu', 'loncu'),
                      ('patch', 1, 'lono', 'luncu'),
                      ('patch', 1, 'lajo', 'lyncu'),
-                     ('patch', 1, 'lene', 'lunci'),
+                     ('patch', 1, 'lene', 'lunci')
                     ]
                      )
-def test_put_booking(api,
+def test_put_booking(api_request,
                      method: str,
                      bookingid: int,
-                     firstname = "lan",
-                     lastname = "lun",
-                     totalprice = 111,
-                     deposit = True,
+                     firstname,
+                     lastname,
+                     totalprice=111,
+                     deposit=True,
                      checkin = "2026-02-01",
                      checkout = "2026-02-03",
                      additional = "Breakfast"
@@ -55,8 +55,8 @@ def test_put_booking(api,
                       }
     
     logger.info(f'start request {method} /booking/{bookingid}')
-    response = api.fetch(f'/booking/{bookingid}', method, data=data)
-    assert response.ok, "response is'nt ok'"
+    response = api_request.fetch(f'/booking/{bookingid}', method=method, data=data)
+    assert response.ok, f"response is'nt ok, {response.status}"
     logger.info('response status ok')
     assert response.body(), "there is'nt body'"
     logger.info('there is body')

@@ -3,7 +3,7 @@ import jsonschema
 import logging
 logger = logging.getLogger(__name__)
 
-def test_create_booking(api):
+def test_create_booking(api_request):
     data = {
         "firstname" : "Jim",
         "lastname" : "Brown",
@@ -37,8 +37,8 @@ def test_create_booking(api):
         }
     }
     logger.info('start request post /booking')
-    response = api.post('/booking', data=data)
-    assert response.ok, "response is'nt ok'"
+    response = api_request.post('/booking', data=data)
+    assert response.ok, f"response is'nt ok,\nstatus: {response.status}\n body: {response.body}"
     logger.info('response status ok')
     assert response.body(), "there is'nt body'"
     logger.info('there is body')

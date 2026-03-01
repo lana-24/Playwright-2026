@@ -11,8 +11,8 @@ logger = logging.getLogger(__name__)
                          valid_users
                          #[('lana','lako','lana@test.com','1121212123123')]
                          )
-def test_booking_rooms(page, fname, lname, email, phone):
-    booking = BookRoom(page)
+def test_booking_rooms(browser_page, fname, lname, email, phone):
+    booking = BookRoom(browser_page)
     booking.to_rooms()
     room = booking.select_room()
     assert room is True
@@ -32,8 +32,8 @@ def test_booking_rooms(page, fname, lname, email, phone):
                          invalid_users
                          #[('la','li','lanatest.com','1121')]
                          )
-def test_booking_with_invalid_identity(page, fname, lname, email, phone):
-    booking = BookRoom(page)
+def test_booking_with_invalid_identity(browser_page, fname, lname, email, phone):
+    booking = BookRoom(browser_page)
     booking.to_rooms()
     room = booking.select_room()
     assert room is True
@@ -51,8 +51,8 @@ def test_booking_with_invalid_identity(page, fname, lname, email, phone):
                          invalid_firstname
                          #[('la','lano','lana@test.com','1121212123123')]
                          )
-def test_booking_with_invalid_fname(page, fname, lname, email, phone):
-    booking = BookRoom(page)
+def test_booking_with_invalid_fname(browser_page, fname, lname, email, phone):
+    booking = BookRoom(browser_page)
     booking.to_rooms()
     room = booking.select_room()
     assert room is True
@@ -67,8 +67,8 @@ def test_booking_with_invalid_fname(page, fname, lname, email, phone):
                          invalid_lastname
                          #[('lana','la','lana@test.com','1121212123123')]
                          )
-def test_booking_with_invalid_lname(page, fname, lname, email, phone):
-    booking = BookRoom(page)
+def test_booking_with_invalid_lname(browser_page, fname, lname, email, phone):
+    booking = BookRoom(browser_page)
     booking.to_rooms()
     room = booking.select_room()
     assert room is True
@@ -83,8 +83,8 @@ def test_booking_with_invalid_lname(page, fname, lname, email, phone):
                          invalid_email
                          #[('lana','lano','lanatest.com','1121212123123')]
                          )
-def test_booking_with_invalid_email(page, fname, lname, email, phone):
-    booking = BookRoom(page)
+def test_booking_with_invalid_email(browser_page, fname, lname, email, phone):
+    booking = BookRoom(browser_page)
     booking.to_rooms()
     room = booking.select_room()
     assert room is True
@@ -99,8 +99,8 @@ def test_booking_with_invalid_email(page, fname, lname, email, phone):
                          invalid_phone
                          #[('lana','lano','lana@test.com','112123')]
                          )
-def test_booking_with_invalid_phone(page, fname, lname, email, phone):
-    booking = BookRoom(page)
+def test_booking_with_invalid_phone(browser_page, fname, lname, email, phone):
+    booking = BookRoom(browser_page)
     booking.to_rooms()
     room = booking.select_room()
     assert room is True
