@@ -26,3 +26,16 @@ simple automation software toolshop testing
    - PASSWORD: pass123
 7. **Run** tests: `pytest`
 
+
+## Test Case
+
+| ID    | Feature | Test Scenarios                      | Expected Result                                |
+|-------|---------|-------------------------------------|------------------------------------------------|
+| TC-01 | Login   | login with valid email and password | login success                                  |
+| TC-02 | Login   | login with invalid email            | login failed, show massage invalid email       |
+| TC-03 | Login   | login with invalid password         | login failed, show massage invalid password    |
+| TC-04 | Login   | login with empty email              | login failed, show message invalid credentials |
+| TC-05 | Login   | login with empty password           | login failed, show message invalid credentials |
+| TC-06 | Login   | login with empty email and password | login failed, show message invalid credentials |
+| TC-07 | Logout  | logout after success login          | logout success and back to login page          |
+
