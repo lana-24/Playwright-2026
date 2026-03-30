@@ -21,6 +21,9 @@ class Login(BasePage):
             self.page.get_by_test_id("password").focus()
 
         self.page.get_by_test_id("login-submit").click()
+
+    def get_error(self):
+        return self.page.locator(".alert alert-danger").all_inner_texts()
         
     def click_logout(self):
         # click menu button
